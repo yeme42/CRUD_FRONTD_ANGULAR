@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { NavComponent } from './shared/nav/nav.component';
+import { FooterComponent } from './shared/footer/footer.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -9,27 +11,15 @@ describe('AppComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        AppComponent
+        AppComponent, NavComponent, FooterComponent
       ],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('Debe crear el componente app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'crud-fronted'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('crud-fronted');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('crud-fronted app is running!');
-  });
 });

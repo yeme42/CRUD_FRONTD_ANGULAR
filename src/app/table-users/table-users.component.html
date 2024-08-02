@@ -21,7 +21,7 @@
                 <td>{{ product.correo }}</td>
                 <td>
                     <i (click)="updateUser(product)" class="pi pi-user-edit m-1 pointer" pInputText pTooltip="Editar usuario" tooltipPosition="bottom" style="font-size: 1rem"></i>
-                    <i (click)="confirmDelete(product.id)"class="pi pi-trash pointer" pInputText pTooltip="Eliminar usuario" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                    <i (click)="openModal(product.id)"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="pi pi-trash pointer" pInputText pTooltip="Eliminar usuario" tooltipPosition="bottom" style="font-size: 1rem"></i>
 
                 </td>
             </tr>
@@ -33,18 +33,21 @@
     </div>
     </div>
 
-    
-    <p-confirmDialog #cd [style]="{width: '50vw'}">
-        <ng-template pTemplate="header">
-            <h3>Eliminar usuario</h3>
-        </ng-template>
-        <ng-template pTemplate="footer">
-            <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
-            <button type="button" pButton icon="pi pi-check" label="Yes" (click)="cd.accept()"></button>
-        </ng-template>
-    </p-confirmDialog>
-
-    <p-toast position="top-right" [baseZIndex]="5000" key="confirmed"></p-toast>
-    <p-toast position="top-right" [baseZIndex]="5000" key="success"></p-toast>
-    <p-toast position="top-right" [baseZIndex]="5000" key="error"></p-toast>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Eliminar usuario.</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ¿Esta seguro que desea eliminar este usuario?
+        </div>
+        <div class="modal-footer">
+          <button  type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button  data-bs-dismiss="modal" (click)="deleteUser()" type="button" class="btn btn-primary">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 

@@ -21,9 +21,9 @@ export class ModalUpdateComponent implements OnInit{
               private modalService:ServiceClient
   ){
     this.form = this.fb.group({
-      nombre: [this.config.data.nombre, Validators.required],
-      apellido: [this.config.data.apellido, Validators.required],
-      correo: [this.config.data.correo, [Validators.required, Validators.email]]
+      nombre: [this.config?.data?.nombre, Validators.required],
+      apellido: [this.config?.data?.apellido, Validators.required],
+      correo: [this.config?.data?.correo, [Validators.required, Validators.email]]
     });
   }
 
@@ -35,7 +35,7 @@ export class ModalUpdateComponent implements OnInit{
     if (this.form.valid) {
       
       const formData= this.form.value
-      const id = this.config.data.id
+      const id = this.config?.data?.id
 
       this.modalService.updateUser(formData, id).subscribe((resp)=>{
         this.ref.close(this.form.value)

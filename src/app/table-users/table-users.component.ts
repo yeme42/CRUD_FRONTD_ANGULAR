@@ -4,7 +4,7 @@ import { ConfirmationService, ConfirmEventType, PrimeNGConfig } from 'primeng/ap
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalUpdateComponent } from '../modal/modal-update/modal-update.component';
 import { ModalAddComponent } from '../modal/modal-add/modal-add.component';
-import { Form } from '@angular/forms';
+import Swal from 'sweetalert2'
 import {MessageService} from 'primeng/api';
 
 
@@ -21,7 +21,8 @@ export class TableUsersComponent implements OnInit{
   totalRecords:number = 0
   rows: number = 5;
 
-  displayModal: boolean = false
+  idDelete:any=[]
+  alert:boolean=false 
 
   ngOnInit(){
     this.cargarTabla();
@@ -61,7 +62,21 @@ export class TableUsersComponent implements OnInit{
   });
   ref.onClose.subscribe((resp: any) => {
     if (resp) {
-      this.messageService.add({ key: 'confirmed', severity:'success', summary:'Exitoso¡¡', detail:'Usuario creado correctamente.'});
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Usuario creado con exito."
+      });
       this.cargarTabla();
     } else {
     }
@@ -79,7 +94,23 @@ export class TableUsersComponent implements OnInit{
 
     ref.onClose.subscribe((resp: any) => {
       if (resp) {
-        this.messageService.add({severity:'success', summary:'Actualizado?', detail:'Usuario actualizado correctamente.'});
+        
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "info",
+          title: "Actualizado con exito"
+        });
+
         this.cargarTabla();
       } else {
       }
@@ -87,22 +118,33 @@ export class TableUsersComponent implements OnInit{
   }
 
 
-  deleteUser(id:number){
-    this.service.deleteUser(id).subscribe((resp)=>{
+  deleteUser(){
+    this.service.deleteUser(this.idDelete).subscribe((resp)=>{
       this.messageService.add({ key: 'confirmed', severity: 'success', summary: 'Eliminado', detail: 'Usuario eliminado correctamente.' });
       this.cargarTabla()
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Eliminado con exito"
+      });
     })
   }
 
-  confirmDelete(id:number) {
-    this.confirmationService.confirm({
-        message: '¿Esta seguro que desea eliminar el usuario?',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-              this.deleteUser(id)
-          },
-    });
-}
+  openModal(data:any){
+    this.idDelete = data
+    this.alert= true
+    console.log("se esta enviadno esto", this.idDelete)
+  }
 
 }
 
