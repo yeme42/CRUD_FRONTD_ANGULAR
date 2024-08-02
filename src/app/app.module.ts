@@ -20,7 +20,10 @@ import {DialogModule} from 'primeng/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import {DialogService, DynamicDialogConfig, DynamicDialogModule, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {ToastModule} from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {MenubarModule} from 'primeng/menubar';
+import {MenuItem} from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -45,12 +48,15 @@ import { MessageService } from 'primeng/api';
     DialogModule,
     DynamicDialogModule,
     ReactiveFormsModule,
-    ToastModule
+    ToastModule,
+    MenubarModule,
+    ConfirmDialogModule,
+    
   ],
   entryComponents:[
     ModalUpdateComponent
   ],
-  providers: [DialogService, DynamicDialogConfig,DynamicDialogRef, MessageService],
+  providers: [DialogService, DynamicDialogConfig,DynamicDialogRef, MessageService, ConfirmationService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceClient } from '../service/service.service';
-import { PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, PrimeNGConfig } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalUpdateComponent } from '../modal/modal-update/modal-update.component';
 import { ModalAddComponent } from '../modal/modal-add/modal-add.component';
@@ -31,7 +31,8 @@ export class TableUsersComponent implements OnInit{
               private service: ServiceClient,
               public ref: DynamicDialogRef,
               public config: DynamicDialogConfig,
-              public dialogService: DialogService
+              public dialogService: DialogService,
+              private confirmationService: ConfirmationService
   ){
 
   }
@@ -50,51 +51,58 @@ export class TableUsersComponent implements OnInit{
     this.rows = event.rows;
     this.cargarTabla();
   }
-
-  updateUser(value:any) {
-    const ref = this.dialogService.open(ModalUpdateComponent, {
-        data: value,
-        header: 'Actualizar usuario',
-        width: '60%',
-        contentStyle: {"max-height": "500px", "overflow": "auto"},
-        baseZIndex: 10000
-    });
-
-    ref.onClose.subscribe((resp: any) => {
-      if (resp) {
-        this.messageService.add({severity:'success', summary:'Exitoso¡¡', detail:'Usuario creado correctamente.'});
-        this.cargarTabla();
-      } else {
-        this.messageService.add({severity:'error', summary:'Error', detail:'No se pudo crear el usuario.'});
-      }
-    });
-  }
-
+  
   createUser(){const ref = this.dialogService.open(ModalAddComponent, {
     header: 'Crear nuevo usuario',
-    width: '60%',
-    contentStyle: {"max-height": "500px", "overflow": "auto"},
+    width: '40%',
+    contentStyle: {"max-height": "400px", "overflow": "auto" },
     baseZIndex: 10000
 
   });
   ref.onClose.subscribe((resp: any) => {
     if (resp) {
-      console.log(resp, "este valor se devolvio al")
-      this.messageService.add({severity:'success', summary:'Exitoso¡¡', detail:'Usuario creado correctamente.'});
+      this.messageService.add({ key: 'confirmed', severity:'success', summary:'Exitoso¡¡', detail:'Usuario creado correctamente.'});
       this.cargarTabla();
     } else {
-      this.messageService.add({severity:'error', summary:'Error', detail:'No se pudo crear el usuario.'});
     }
   });
   }
 
+  updateUser(value:any) {
+    const ref = this.dialogService.open(ModalUpdateComponent, {
+        data: value,
+        header: 'Actualizar usuario',
+        width: '40%',
+        contentStyle: {"max-height": "400", "overflow": "auto"},
+        baseZIndex: 10000
+    });
+
+    ref.onClose.subscribe((resp: any) => {
+      if (resp) {
+        this.messageService.add({severity:'success', summary:'Actualizado?', detail:'Usuario actualizado correctamente.'});
+        this.cargarTabla();
+      } else {
+      }
+    });
+  }
+
+
   deleteUser(id:number){
     this.service.deleteUser(id).subscribe((resp)=>{
-      console.log(resp)
+      this.messageService.add({ key: 'confirmed', severity: 'success', summary: 'Eliminado', detail: 'Usuario eliminado correctamente.' });
       this.cargarTabla()
     })
   }
 
+  confirmDelete(id:number) {
+    this.confirmationService.confirm({
+        message: '¿Esta seguro que desea eliminar el usuario?',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+              this.deleteUser(id)
+          },
+    });
+}
 
 }
 
